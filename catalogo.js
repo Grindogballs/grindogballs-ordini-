@@ -1,0 +1,25 @@
+// Catalogo Grindogballs v4 - aggiungi qui nuovi sinonimi quando servono
+const GB_CATALOGO = [
+  { nome:'Dolce', tipo:'salsiccia', sinonimi:['dolce','classica','normale','mild','sweet','suss','suess'] },
+  { nome:'Piccante', tipo:'salsiccia', sinonimi:['piccante','pikant','scharf','hot','chili','peperoncino'] },
+  { nome:'Finocchio piccante', tipo:'salsiccia', sinonimi:['finocchio piccante','finocchietto piccante','fenchel scharf','fenchel pikant'] },
+  { nome:'Finocchio', tipo:'salsiccia', sinonimi:['finocchio','finocchietto','fenchel','finocchio semplice'] },
+  { nome:'Pizzaiola', tipo:'salsiccia', sinonimi:['pizzaiola','pizza','pizzaiolo'] },
+  { nome:'Gorgonzola', tipo:'salsiccia', sinonimi:['gorgonzola','gorgo','gorgonzolla'] },
+  { nome:'Tartufo', tipo:'salsiccia', sinonimi:['tartufo','truffel','trueffel','trüffel'] },
+  { nome:'Aglio', tipo:'salsiccia', sinonimi:['aglio','knoblauch','garlic'] },
+  { nome:'Romana', tipo:'salsiccia', sinonimi:['romana','roma'] },
+  { nome:'Contadina', tipo:'salsiccia', sinonimi:['contadina','bauern','country'] },
+  { nome:'Texas Twinkie', tipo:'salsiccia', sinonimi:['texas twinkie','twinkie','texas'] },
+  { nome:'Provola e Parmigiano', tipo:'salsiccia', sinonimi:['provola e parmigiano','provola parmigiano','provola','parmigiano'] },
+  { nome:'Rucola e Grana', tipo:'salsiccia', sinonimi:['rucola e grana','rucola grana','rucola','grana'] },
+  { nome:'Hamburger', tipo:'carne', sinonimi:['hamburger','burger','hamburgher'] },
+  { nome:'Rib Eye Argentina', tipo:'carne', sinonimi:['rib eye argentina','ribeye argentina','rib eye arg','ribeye arg','argentina'] },
+  { nome:'Rib Eye Irlanda', tipo:'carne', sinonimi:['rib eye irlanda','ribeye irlanda','rib eye irish','irlanda','irland'] },
+  { nome:'Rib Eye Svizzera', tipo:'carne', sinonimi:['rib eye svizzera','ribeye svizzera','rib eye schweiz','svizzera','schweiz','ch angus','angus svizzero'] },
+  { nome:'Costata', tipo:'carne', sinonimi:['costata','costate'] },
+  { nome:'Fiorentina', tipo:'carne', sinonimi:['fiorentina','fiorentine','t bone','t-bone','tbone'] },
+  { nome:'Fassona', tipo:'carne', sinonimi:['fassona','fassona piemontese'] },
+  { nome:'Tomahawk', tipo:'carne', sinonimi:['tomahawk'] },
+  { nome:'Tagliere', tipo:'altro', sinonimi:['tagliere','taglieri','apero','apéro','apero platte','apéro platte','platte'] }
+];
