@@ -1,105 +1,65 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#111111" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icon.svg" />
-  <title>GB Ordini</title>
-  <style>
-    :root{--bg:#0d0d0f;--card:#17171a;--muted:#a9a9b2;--text:#fff;--orange:#ff7a00;--green:#31c26b;--red:#ff4d4d;--line:#2b2b31}
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:env(safe-area-inset-top) 14px 80px}
-    header{position:sticky;top:0;background:linear-gradient(#0d0d0f 80%,rgba(13,13,15,.8));z-index:5;padding:18px 0 12px} h1{font-size:24px;margin:0;font-weight:900;letter-spacing:.5px}.brand{color:var(--orange)}
-    .tabs{display:flex;gap:8px;margin-top:14px;overflow:auto}.tab{border:1px solid var(--line);background:#121214;color:#fff;padding:10px 12px;border-radius:999px;font-weight:700;white-space:nowrap}.tab.active{background:var(--orange);border-color:var(--orange);color:#111}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    label{display:block;font-size:13px;color:var(--muted);font-weight:700;margin:10px 0 6px} input,textarea,select{width:100%;background:#0f0f12;border:1px solid #34343b;color:#fff;border-radius:13px;padding:13px;font-size:16px;outline:none} textarea{min-height:110px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-    button{border:0;border-radius:14px;padding:13px 14px;font-size:16px;font-weight:900;background:var(--orange);color:#111}.btn2{background:#29292f;color:#fff}.btnGreen{background:var(--green);color:#071}.btnRed{background:var(--red);color:#fff}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.small{font-size:13px;padding:9px 10px;border-radius:12px}.muted{color:var(--muted)}
-    .order{border-left:5px solid var(--orange)}.order.preparato{border-left-color:#ffd23f}.order.consegnato{border-left-color:var(--green);opacity:.82}.order h3{margin:0 0 5px;font-size:19px}.meta{color:var(--muted);font-size:14px;margin:4px 0}.products{white-space:pre-wrap;line-height:1.45;margin:9px 0;font-size:16px}.badge{display:inline-block;border:1px solid #444;border-radius:999px;padding:5px 9px;font-size:12px;color:#ddd;margin-right:5px}.empty{text-align:center;color:var(--muted);padding:30px 10px}.totalLine{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:10px 0;font-size:17px}.totalLine b{color:var(--orange)}
-    .hint{background:#21180f;border:1px solid #5d3a13;color:#ffd9b0;border-radius:14px;padding:10px;margin-top:10px;font-size:14px;line-height:1.35}.hide{display:none!important}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GB Ordini v3</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+<style>
+:root{--bg:#0d0d0d;--card:#191919;--line:#333;--text:#f7f7f7;--muted:#aaa;--orange:#ff7a00;--green:#20c997;--red:#ff4d4d;--blue:#4dabf7}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;padding-bottom:90px} header{padding:18px 16px 12px;background:#111;position:sticky;top:0;z-index:9;border-bottom:1px solid var(--line)} h1{margin:0;font-size:22px;letter-spacing:.5px} .ver{color:var(--orange);font-size:12px;margin-top:4px}.wrap{padding:14px;max-width:760px;margin:auto}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 6px 20px rgba(0,0,0,.18)}label{display:block;color:var(--muted);font-size:13px;margin:10px 0 5px}input,textarea,select{width:100%;background:#0f0f0f;color:var(--text);border:1px solid #444;border-radius:12px;padding:12px;font-size:16px}textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:700;font-size:15px;background:var(--orange);color:#111;margin:5px 4px 5px 0}.btn2{background:#2b2b2b;color:#fff;border:1px solid #444}.btnG{background:var(--green);color:#071}.btnR{background:var(--red);color:#fff}.tabs{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid var(--line);display:flex;z-index:20}.tab{flex:1;text-align:center;padding:10px 4px;color:#bbb;font-size:12px}.tab.active{color:var(--orange);font-weight:800}.tab b{display:block;font-size:22px}.hide{display:none}.order{border-left:5px solid var(--orange)}.order.preparato{border-left-color:var(--blue)}.order.consegnato{border-left-color:var(--green);opacity:.75}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#2b2b2b;margin:3px;font-size:13px}.items{margin:8px 0}.itemline{padding:6px 0;border-bottom:1px solid #282828}.small{font-size:13px;color:var(--muted)}.title{font-size:18px;font-weight:800}.tot{display:flex;justify-content:space-between;border-bottom:1px solid #333;padding:9px 0}.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.quick button{background:#222;color:#fff;border:1px solid #444;border-radius:12px;padding:10px}.danger{color:#ff7777}.ok{color:#5be092}
+</style>
 </head>
 <body>
-<header><h1><span class="brand">GB</span> Ordini</h1><div class="muted">Gestionale Grindogballs · v2 parser</div><div class="tabs"><button class="tab active" data-tab="new">➕ Nuovo</button><button class="tab" data-tab="orders">📦 Ordini</button><button class="tab" data-tab="prod">🥩 Produzione</button></div></header>
-
-<section id="new" class="screen">
-  <div class="card">
-    <label>Incolla messaggio WhatsApp / Mail</label>
-    <textarea id="raw" placeholder="Esempio: Ciao Roberto, per venerdì 3 luglio ore 16:00\n10x dolce\n10x piccante\n10x finocchietto\n10x pizzaiola\nSaluti Walter"></textarea>
-    <div class="actions"><button id="analyze">🤖 Analizza</button><button class="btn2" id="clearRaw">Pulisci</button></div>
-    <div class="hint">Nuovo parser: legge più righe tipo <b>10x dolce</b>, <b>10 piccante</b>, italiano/tedesco, data, ora e nome in fondo tipo “Saluti Walter”.</div>
-  </div>
-  <div class="card">
-    <input type="hidden" id="editingId">
-    <label>Cliente</label><input id="cliente" placeholder="Nome cliente">
-    <label>Telefono</label><input id="telefono" placeholder="Telefono">
-    <div class="row"><div><label>Data</label><input id="data" type="date"></div><div><label>Ora</label><input id="ora" type="time"></div></div>
-    <label>Luogo</label><select id="luogo"><option>Wettingen</option><option>Würenlos</option><option>Catering</option><option>Altro</option></select>
-    <label>Ordine</label><textarea id="prodotti" placeholder="10x dolce&#10;10x piccante"></textarea>
-    <label>Note</label><textarea id="note" style="min-height:70px" placeholder="Note"></textarea>
-    <div class="row"><div><label>Stato</label><select id="stato"><option>Da preparare</option><option>Preparato</option><option>Consegnato</option></select></div><div><label>Pagamento</label><select id="pagato"><option>Da pagare</option><option>Pagato</option></select></div></div>
-    <div class="actions"><button id="save">💾 Salva ordine</button><button class="btn2" id="reset">Nuovo vuoto</button></div>
-  </div>
+<header><h1>🥩 Grindogballs Ordini</h1><div class="ver">v3.0 parser IT/DE + kg/pezzi + produzione</div></header>
+<div class="wrap">
+<section id="home">
+ <div class="card"><div class="title">📲 Importa da WhatsApp</div><label>Incolla messaggio cliente</label><textarea id="raw" placeholder="Esempio: Für Freitag 3. Juli... 10x dolce... 5 kg finocchio..."></textarea><button class="btn" onclick="analyze()">🤖 Analizza</button><button class="btn btn2" onclick="clearForm()">Pulisci</button><div id="parseInfo" class="small"></div></div>
+ <div class="card"><div class="title">➕ Nuovo ordine</div><label>Cliente</label><input id="cliente" placeholder="Nome cliente"><label>Telefono</label><input id="telefono" placeholder="Telefono">
+ <div class="row"><div><label>Data ritiro</label><input id="data" type="date"></div><div><label>Ora</label><input id="ora" type="time"></div></div><label>Luogo</label><select id="luogo"><option>Wettingen</option><option>Würenlos</option><option>Catering</option></select>
+ <label>Prodotti riconosciuti / ordine</label><textarea id="prodotti" placeholder="10 pz Dolce&#10;5 kg Finocchio"></textarea><div class="quick"><button onclick="addQuick('Dolce','pz')">+ Dolce</button><button onclick="addQuick('Piccante','pz')">+ Piccante</button><button onclick="addQuick('Finocchio','kg')">+ Finocchio kg</button><button onclick="addQuick('Gorgonzola','kg')">+ Gorgonzola kg</button></div>
+ <label>Note</label><input id="note" placeholder="Note"><label>Pagamento</label><select id="pagato"><option>Da pagare</option><option>Pagato</option><option>Fattura</option></select><button class="btn" onclick="saveOrder()">💾 Salva ordine</button></div>
 </section>
-
-<section id="orders" class="screen hide">
-  <div class="card"><div class="row"><input id="search" placeholder="Cerca cliente / prodotto"><select id="filter"><option value="all">Tutti</option><option value="today">Oggi</option><option value="tomorrow">Domani</option><option value="open">Da fare</option></select></div></div>
-  <div id="ordersList"></div>
-</section>
-
-<section id="prod" class="screen hide"><div class="card"><label>Produzione per data</label><input id="prodDate" type="date"><div class="actions"><button id="calcProd">Calcola</button></div></div><div class="card" id="prodResults"></div></section>
-
+<section id="orders" class="hide"><div class="card"><div class="title">📦 Ordini</div><input id="search" placeholder="Cerca cliente/prodotto" oninput="renderOrders()"><button class="btn btn2" onclick="setTodayFilter('today')">Oggi</button><button class="btn btn2" onclick="setTodayFilter('tomorrow')">Domani</button><button class="btn btn2" onclick="setTodayFilter('all')">Tutti</button></div><div id="ordersList"></div></section>
+<section id="prod" class="hide"><div class="card"><div class="title">🥩 Produzione</div><label>Data</label><input id="prodDate" type="date" onchange="renderProduction()"><div id="prodList"></div></div></section>
+<section id="clients" class="hide"><div class="card"><div class="title">👥 Clienti</div><div id="clientList"></div></div></section>
+</div>
+<nav class="tabs"><div class="tab active" onclick="show('home',this)"><b>➕</b>Ordine</div><div class="tab" onclick="show('orders',this)"><b>📦</b>Ordini</div><div class="tab" onclick="show('prod',this)"><b>🥩</b>Produzione</div><div class="tab" onclick="show('clients',this)"><b>👥</b>Clienti</div></nav>
 <script>
-const $=id=>document.getElementById(id); const storeKey='gb_orders_v2';
-let orders=JSON.parse(localStorage.getItem(storeKey)||'[]');
-const months={gennaio:0,jan:0,januar:0,febbraio:1,februar:1,marzo:2,märz:2,maerz:2,aprile:3,april:3,maggio:4,mai:4,giugno:5,juni:5,luglio:6,juli:6,agosto:7,august:7,settembre:8,september:8,ottobre:9,oktober:9,novembre:10,november:10,dicembre:11,dezember:11};
-const weekdays={oggi:0,heute:0,domani:1,morgen:1,lunedi:1,lunedì:1,montag:1,martedi:2,martedì:2,dienstag:2,mercoledi:3,mercoledì:3,mittwoch:3,giovedi:4,giovedì:4,donnerstag:4,venerdi:5,venerdì:5,freitag:5,sabato:6,samstag:6,domenica:0,sonntag:0};
-const productMap=[
- ['finocchio piccante',['finocchio piccante','finocchietto piccante','fenchel scharf']],['dolce',['dolce','classica','normale','mild','süss','suess']],['piccante',['piccante','scharf']],['finocchietto',['finocchietto','finocchio','fenchel']],['pizzaiola',['pizzaiola']],['aglio',['aglio','knoblauch']],['romana',['romana']],['gorgonzola',['gorgonzola']],['tartufo',['tartufo','trüffel','trueffel']],['texas twinkie',['texas','twinkie']],['contadina',['contadina']],['provola e parmigiano',['provola','parmigiano']],['rucola e grana',['rucola','grana']],['rib eye argentina',['rib eye argentina','ribeye argentina','argentina']],['rib eye irlanda',['rib eye irlanda','ribeye irlanda','irlanda','irland']],['rib eye svizzera',['rib eye svizzera','ribeye svizzera','svizzera','schweiz']],['fiorentina',['fiorentina']],['costata',['costata']],['hamburger',['hamburger','burger']]
-];
-function saveStore(){localStorage.setItem(storeKey,JSON.stringify(orders)); render();}
-function iso(d){return d.toISOString().slice(0,10)}
-function addDays(n){let d=new Date(); d.setDate(d.getDate()+n); return iso(d)}
-function nextWeekday(target){let d=new Date(); let cur=d.getDay(); let diff=(target-cur+7)%7; if(diff===0) diff=7; d.setDate(d.getDate()+diff); return iso(d)}
-function normalize(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u');}
-function canonicalProduct(text){let n=normalize(text); for(const [canon,syns] of productMap){ if(syns.some(x=>n.includes(normalize(x)))) return canon; } return text.trim();}
-function parseMessage(txt){
- const res={cliente:'',telefono:'',data:'',ora:'',prodotti:[],note:''}; const lines=txt.split(/\n+/).map(l=>l.trim()).filter(Boolean); const all=' '+txt+' '; const low=normalize(all);
- let phone=all.match(/(\+?\d[\d\s]{6,}\d)/); if(phone) res.telefono=phone[1].trim();
- let time=all.match(/(?:ore|um|alle|ca\.?|circa)?\s*(\d{1,2})[:\.](\d{2})\s*(?:uhr)?/i); if(time) res.ora=String(time[1]).padStart(2,'0')+':'+time[2]; else {let t2=all.match(/(?:ore|um|alle)\s*(\d{1,2})\s*(?:uhr)?/i); if(t2) res.ora=String(t2[1]).padStart(2,'0')+':00';}
- let explicit=low.match(/\b(\d{1,2})[\.\/-]?\s*(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre|januar|februar|marz|maerz|april|mai|juni|juli|august|september|oktober|november|dezember)\b/); if(explicit){let d=parseInt(explicit[1]); let m=months[explicit[2]]; let y=new Date().getFullYear(); res.data=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
- if(!res.data){ for(const [w,val] of Object.entries(weekdays)){ if(low.includes(w)){ res.data=(val===0 && (w==='oggi'||w==='heute'))?addDays(0):(val===1 && (w==='domani'||w==='morgen'))?addDays(1):nextWeekday(val); break; } } }
- let namePatterns=[/saluti\s+([A-ZÀ-Ü][A-Za-zÀ-ÿ' -]{1,30})/i,/gr[üu]sse\s+([A-ZÀ-Ü][A-Za-zÀ-ÿ' -]{1,30})/i,/gruss\s+([A-ZÀ-Ü][A-Za-zÀ-ÿ' -]{1,30})/i,/sono\s+([A-ZÀ-Ü][A-Za-zÀ-ÿ' -]{1,30})/i,/ich bin\s+([A-ZÀ-Ü][A-Za-zÀ-ÿ' -]{1,30})/i];
- for(const p of namePatterns){let m=txt.match(p); if(m){res.cliente=m[1].trim().replace(/[.,!].*$/,''); break;}}
- if(!res.cliente){let last=lines[lines.length-1]||''; if(/^[A-ZÀ-Ü][A-Za-zÀ-ÿ' -]{2,25}$/.test(last) && !/grazie|danke|saluti|grusse|grüße/i.test(last)) res.cliente=last;}
- const found=[];
- for(const line of lines){
-   let n=normalize(line);
-   let m=line.match(/(?:^|\s)(\d+(?:[\.,]\d+)?)\s*(?:x|×|stk|stuck|stück|pezzi|pz|kg|kilo)?\s+(.+)/i);
-   if(m){ let qty=m[1].replace(',','.'); let rest=m[2].replace(/\b(per|für|fuer|venerdi|freitag|ore|um|uhr|alle|bitte|danke|grazie)\b.*$/i,'').trim(); let prod=canonicalProduct(rest); if(prod && !/luglio|juli|ore|uhr|saluti|grusse|grazie|danke/i.test(prod)) found.push(`${qty}x ${prod}`); continue; }
-   // product before quantity: piccante 10x
-   let m2=line.match(/(.+?)\s+(\d+(?:[\.,]\d+)?)\s*(?:x|×|stk|stuck|stück|pezzi|pz|kg|kilo)?\b/i);
-   if(m2 && productMap.some(([c,s])=>s.some(x=>n.includes(normalize(x))))){found.push(`${m2[2].replace(',','.')}x ${canonicalProduct(m2[1])}`)}
- }
- // fallback scan all text for repeated patterns separated by comma
- const re=/(\d+(?:[\.,]\d+)?)\s*(?:x|×|stk|stuck|stück|pezzi|pz|kg|kilo)?\s+([a-zA-ZÀ-ÿ ]{3,35})/g; let mm;
- while((mm=re.exec(txt))){let prod=canonicalProduct(mm[2]); if(productMap.some(([c])=>c===prod) && !found.some(f=>f.includes(prod))) found.push(`${mm[1].replace(',','.')}x ${prod}`);}
- res.prodotti=[...new Set(found)]; return res;
-}
-function fillParsed(p){ if(p.cliente) $('cliente').value=p.cliente; if(p.telefono) $('telefono').value=p.telefono; if(p.data) $('data').value=p.data; if(p.ora) $('ora').value=p.ora; if(p.prodotti.length) $('prodotti').value=p.prodotti.join('\n'); }
-$('analyze').onclick=()=>{fillParsed(parseMessage($('raw').value));}; $('clearRaw').onclick=()=>{$('raw').value=''};
-function resetForm(){['editingId','cliente','telefono','ora','prodotti','note'].forEach(id=>$(id).value=''); $('data').value=iso(new Date()); $('luogo').value='Wettingen'; $('stato').value='Da preparare'; $('pagato').value='Da pagare';}
-$('reset').onclick=resetForm; resetForm(); $('prodDate').value=iso(new Date());
-$('save').onclick=()=>{let o={id:$('editingId').value||Date.now().toString(),cliente:$('cliente').value.trim()||'Senza nome',telefono:$('telefono').value.trim(),data:$('data').value,ora:$('ora').value,luogo:$('luogo').value,prodotti:$('prodotti').value.trim(),note:$('note').value.trim(),stato:$('stato').value,pagato:$('pagato').value,created:Date.now()}; let i=orders.findIndex(x=>x.id===o.id); if(i>=0) orders[i]=o; else orders.unshift(o); saveStore(); resetForm(); switchTab('orders');};
-function switchTab(t){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hide')); $(t).classList.remove('hide'); document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t)); render();}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab)); $('search').oninput=render; $('filter').onchange=render;
-function render(){let list=$('ordersList'); if(!list) return; let q=normalize($('search').value); let f=$('filter').value; let today=iso(new Date()), tomorrow=addDays(1); let arr=orders.filter(o=>{let txt=normalize(Object.values(o).join(' ')); if(q&&!txt.includes(q))return false; if(f==='today'&&o.data!==today)return false; if(f==='tomorrow'&&o.data!==tomorrow)return false; if(f==='open'&&o.stato==='Consegnato')return false; return true;}).sort((a,b)=>(a.data+a.ora).localeCompare(b.data+b.ora)); list.innerHTML=arr.length?arr.map(o=>`<div class="card order ${o.stato==='Preparato'?'preparato':o.stato==='Consegnato'?'consegnato':''}"><h3>${esc(o.cliente)}</h3><div class="meta">📅 ${o.data||'-'} ${o.ora||''} · 📍 ${o.luogo||''}</div><div class="products">${esc(o.prodotti)}</div><span class="badge">${o.stato}</span><span class="badge">${o.pagato}</span>${o.note?`<div class="meta">📝 ${esc(o.note)}</div>`:''}<div class="actions"><button class="small btn2" onclick="editOrder('${o.id}')">✏️ Modifica</button><button class="small" onclick="setStatus('${o.id}','Preparato')">✔ Preparato</button><button class="small btnGreen" onclick="setStatus('${o.id}','Consegnato')">🚚 Consegnato</button><button class="small btnRed" onclick="delOrder('${o.id}')">🗑</button></div></div>`).join(''):'<div class="empty">Nessun ordine</div>';}
-function esc(s){return String(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-window.editOrder=id=>{let o=orders.find(x=>x.id===id); if(!o)return; ['cliente','telefono','data','ora','luogo','prodotti','note','stato','pagato'].forEach(k=>$(k).value=o[k]||''); $('editingId').value=o.id; switchTab('new');}
-window.setStatus=(id,s)=>{let o=orders.find(x=>x.id===id); if(o){o.stato=s; saveStore();}}
-window.delOrder=id=>{if(confirm('Eliminare ordine?')){orders=orders.filter(o=>o.id!==id); saveStore();}}
-$('calcProd').onclick=()=>{let date=$('prodDate').value; let totals={}; orders.filter(o=>o.data===date).forEach(o=>{(o.prodotti||'').split(/\n|,/).forEach(line=>{let m=line.match(/(\d+(?:[\.,]\d+)?)\s*(?:x|kg)?\s*(.+)/i); if(m){let qty=parseFloat(m[1].replace(',','.')); let prod=canonicalProduct(m[2]); totals[prod]=(totals[prod]||0)+qty;}})}); let keys=Object.keys(totals).sort(); $('prodResults').innerHTML=keys.length?keys.map(k=>`<div class="totalLine"><span>${esc(k)}</span><b>${totals[k]} </b></div>`).join(''):'<div class="empty">Nessun prodotto per questa data</div>';};
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});} render();
+const storeKey='gb_orders_v3'; let orders=JSON.parse(localStorage.getItem(storeKey)||'[]'); let filter='all';
+const products=[['dolce','Dolce'],['classica','Dolce'],['piccante','Piccante'],['finocchietto','Finocchietto'],['finocchio','Finocchio'],['fenchel','Finocchio'],['pizzaiola','Pizzaiola'],['gorgonzola','Gorgonzola'],['tartufo','Tartufo'],['trüffel','Tartufo'],['tartufo','Tartufo'],['aglio','Aglio'],['knoblauch','Aglio'],['romana','Romana'],['contadina','Contadina'],['texas','Texas Twinkie'],['twinkie','Texas Twinkie'],['hamburger','Hamburger'],['burger','Hamburger'],['rib eye argentina','Rib Eye Argentina'],['ribeye argentina','Rib Eye Argentina'],['rib eye irlanda','Rib Eye Irlanda'],['rib eye svizzera','Rib Eye Svizzera'],['costata','Costata'],['fiorentina','Fiorentina'],['fassona','Fassona']];
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u')}
+function productName(text){let n=norm(text); let best=null, len=0; for(const [k,v] of products){if(n.includes(norm(k)) && k.length>len){best=v;len=k.length}} return best}
+function parseDate(text){const t=norm(text); const now=new Date(); const months={gennaio:0,januar:0,january:0,febbraio:1,februar:1,marzo:2,märz:2,marz:2,aprile:3,april:3,maggio:4,mai:4,giugno:5,juni:5,luglio:6,juli:6,agosto:7,august:7,settembre:8,september:8,ottobre:9,oktober:9,novembre:10,november:10,dicembre:11,dezember:11};
+ if(t.includes('domani')||t.includes('morgen')){let d=new Date(now);d.setDate(d.getDate()+1);return iso(d)} if(t.includes('oggi')||t.includes('heute')) return iso(now);
+ const days=['domenica','lunedi','martedi','mercoledi','giovedi','venerdi','sabato']; const daysDe=['sonntag','montag','dienstag','mittwoch','donnerstag','freitag','samstag'];
+ for(let i=0;i<7;i++){ if(t.includes(days[i])||t.includes(daysDe[i])){let d=new Date(now); let diff=(i-d.getDay()+7)%7; if(diff===0 && !/(oggi|heute)/.test(t)) diff=7; d.setDate(d.getDate()+diff); return iso(d)}}
+ let m=t.match(/(\d{1,2})[\.\/\- ]+(\d{1,2})(?:[\.\/\- ]+(\d{2,4}))?/); if(m){let y=m[3]?Number(m[3]):now.getFullYear(); if(y<100)y+=2000; return `${y}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`}
+ m=t.match(/(\d{1,2})\s+([a-zäöü]+)/i); if(m && months[m[2]]!==undefined){let y=now.getFullYear(); return `${y}-${String(months[m[2]]+1).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`}
+ return iso(now)}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function parseTime(text){let m=text.match(/(?:um|alle|ore|ca\.?|circa)?\s*(\d{1,2})[:\.](\d{2})/i); if(m)return `${String(m[1]).padStart(2,'0')}:${m[2]}`; m=text.match(/(?:um|alle|ore)\s+(\d{1,2})\s*(?:uhr)?/i); if(m)return `${String(m[1]).padStart(2,'0')}:00`; return ''}
+function parseName(text){let m=text.match(/(?:saluti|gruss|grüsse|grusse|beste grüsse|lg|ciao)\s+([A-ZÄÖÜ][a-zA-ZäöüÄÖÜß]+)/i); if(m)return cap(m[1]); m=text.match(/sono\s+([A-ZÄÖÜ][a-zA-ZäöüÄÖÜß]+)/i); if(m)return cap(m[1]); m=text.match(/ich bin\s+([A-ZÄÖÜ][a-zA-ZäöüÄÖÜß]+)/i); if(m)return cap(m[1]); return ''}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function parseItems(text){let lines=text.split(/\n|,|;/).map(x=>x.trim()).filter(Boolean); let out=[];
+ for(const line of lines){let p=productName(line); if(!p) continue; let m=line.match(/(\d+(?:[\.,]\d+)?)\s*(x|kg|kilo|kili|g|gr|gramm|grammi|pz|pezzi|stuck|stück|stk)?/i); if(!m) continue; let qty=m[1].replace(',','.'); let unit=(m[2]||'pz').toLowerCase(); if(['kilo','kili'].includes(unit)) unit='kg'; if(['pezzi','stuck','stück','stk','x'].includes(unit)) unit='pz'; if(['gr','gramm','grammi'].includes(unit)) unit='g'; out.push(`${qty} ${unit} ${p}`)}
+ if(out.length===0){let rx=/(\d+(?:[\.,]\d+)?)\s*(x|kg|kilo|kili|g|gr|gramm|grammi|pz|pezzi|stuck|stück|stk)?\s+([a-zA-ZäöüÄÖÜß ]{3,35})/gi; let m; while((m=rx.exec(text))){let p=productName(m[3]); if(p){let unit=(m[2]||'pz').toLowerCase(); if(['kilo','kili'].includes(unit))unit='kg'; if(['pezzi','stuck','stück','stk','x'].includes(unit))unit='pz'; out.push(`${m[1].replace(',','.')} ${unit} ${p}`)}}}
+ return [...new Set(out)]}
+function analyze(){let text=document.getElementById('raw').value; let items=parseItems(text); document.getElementById('cliente').value=parseName(text)||document.getElementById('cliente').value; document.getElementById('data').value=parseDate(text); document.getElementById('ora').value=parseTime(text); document.getElementById('prodotti').value=items.join('\n'); document.getElementById('parseInfo').innerHTML=`✅ Riconosciuti: ${items.length} prodotti`}
+function addQuick(name,unit){let q=prompt(`Quantità per ${name}?`,'1'); if(!q)return; let t=document.getElementById('prodotti'); t.value+=(t.value?'\n':'')+`${q} ${unit} ${name}`}
+function saveOrder(){let o={id:Date.now(),cliente:v('cliente'),telefono:v('telefono'),data:v('data')||iso(new Date()),ora:v('ora'),luogo:v('luogo'),prodotti:v('prodotti'),note:v('note'),pagato:v('pagato'),stato:'da preparare'}; orders.unshift(o); persist(); clearForm(); renderAll(); alert('Ordine salvato')}
+function v(id){return document.getElementById(id).value.trim()} function persist(){localStorage.setItem(storeKey,JSON.stringify(orders))}
+function clearForm(){['raw','cliente','telefono','ora','prodotti','note'].forEach(id=>document.getElementById(id).value=''); document.getElementById('data').value=iso(new Date()); document.getElementById('parseInfo').innerHTML=''}
+function setTodayFilter(f){filter=f;renderOrders()}
+function renderOrders(){let q=norm(document.getElementById('search')?.value||''); let today=iso(new Date()); let tm=new Date();tm.setDate(tm.getDate()+1);let tomorrow=iso(tm); let arr=orders.filter(o=>filter==='all'||(filter==='today'&&o.data===today)||(filter==='tomorrow'&&o.data===tomorrow)).filter(o=>norm(JSON.stringify(o)).includes(q)); document.getElementById('ordersList').innerHTML=arr.map(o=>`<div class="card order ${o.stato.replace(' ','')}"><div class="title">👤 ${o.cliente||'Senza nome'}</div><div class="small">📅 ${o.data} ${o.ora||''} · 📍 ${o.luogo} · 💰 ${o.pagato}</div><div class="items">${o.prodotti.split('\n').filter(Boolean).map(x=>`<div class="itemline">${x}</div>`).join('')}</div><div class="small">${o.note||''}</div><span class="pill">${o.stato}</span><br><button class="btn btn2" onclick="editOrder(${o.id})">✏️</button><button class="btn btnG" onclick="statusOrder(${o.id},'preparato')">Preparato</button><button class="btn btnG" onclick="statusOrder(${o.id},'consegnato')">Consegnato</button><button class="btn btnR" onclick="delOrder(${o.id})">Elimina</button></div>`).join('')||'<div class="card small">Nessun ordine</div>'}
+function statusOrder(id,s){let o=orders.find(x=>x.id===id); if(o){o.stato=s;persist();renderAll()}}
+function delOrder(id){if(confirm('Eliminare ordine?')){orders=orders.filter(x=>x.id!==id);persist();renderAll()}}
+function editOrder(id){let o=orders.find(x=>x.id===id); if(!o)return; show('home',document.querySelector('.tab')); ['cliente','telefono','data','ora','luogo','prodotti','note','pagato'].forEach(k=>document.getElementById(k).value=o[k]||''); delOrder(id)}
+function renderProduction(){let d=document.getElementById('prodDate').value||iso(new Date()); let totals={}; orders.filter(o=>o.data===d).forEach(o=>o.prodotti.split('\n').forEach(line=>{let m=line.match(/(\d+(?:\.\d+)?)\s*(kg|g|pz)\s+(.+)/i); if(m){let key=m[3].trim()+' ('+m[2].toLowerCase()+')'; totals[key]=(totals[key]||0)+Number(m[1])}})); document.getElementById('prodList').innerHTML=Object.entries(totals).map(([k,v])=>`<div class="tot"><b>${k}</b><span>${v}</span></div>`).join('')||'<p class="small">Nessuna produzione per questa data</p>'}
+function renderClients(){let map={}; orders.forEach(o=>{if(!o.cliente)return; map[o.cliente]=(map[o.cliente]||0)+1}); document.getElementById('clientList').innerHTML=Object.entries(map).map(([c,n])=>`<div class="tot"><b>${c}</b><span>${n} ordini</span></div>`).join('')||'<p class="small">Nessun cliente</p>'}
+function renderAll(){renderOrders();renderProduction();renderClients()}
+function show(id,el){document.querySelectorAll('section').forEach(s=>s.classList.add('hide'));document.getElementById(id).classList.remove('hide');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAll()}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})} document.getElementById('data').value=iso(new Date()); document.getElementById('prodDate').value=iso(new Date()); renderAll();
 </script>
-</body>
-</html>
+</body></html>
