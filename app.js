@@ -1,35 +1,32 @@
-const storeKey='gb_orders_v4';
-let orders=JSON.parse(localStorage.getItem(storeKey)||'[]');
-let filter='all';
-function v(id){return document.getElementById(id).value.trim()}
-function persist(){localStorage.setItem(storeKey,JSON.stringify(orders))}
-function analyze(){
-  const text=document.getElementById('raw').value;
-  const res=parseMessage(text);
-  if(res.cliente) document.getElementById('cliente').value=res.cliente;
-  document.getElementById('data').value=res.data;
-  if(res.ora) document.getElementById('ora').value=res.ora;
-  document.getElementById('prodotti').value=res.prodotti.map(p=>p.line).join('\n');
-  const dbg=[
-    `${res.cliente?'✅':'⚠️'} Cliente: ${res.cliente||'non trovato'}`,
-    `✅ Data: ${res.data}`,
-    `${res.ora?'✅':'⚠️'} Ora: ${res.ora||'non trovata'}`,
-    `${res.prodotti.length?'✅':'⚠️'} Prodotti: ${res.prodotti.length}`,
-    ...res.prodotti.map(p=>'• '+p.line)
-  ];
-  document.getElementById('parseInfo').innerHTML=dbg.join('\n');
-}
-function addQuick(name,unit){let q=prompt(`Quantità per ${name}?`,'1'); if(!q)return; let t=document.getElementById('prodotti'); t.value+=(t.value?'\n':'')+`${q} ${unit} ${name}`}
-function saveOrder(){let o={id:Date.now(),cliente:v('cliente'),telefono:v('telefono'),data:v('data')||gbIso(new Date()),ora:v('ora'),luogo:v('luogo'),prodotti:v('prodotti'),note:v('note'),pagato:v('pagato'),stato:'da preparare'}; orders.unshift(o); persist(); clearForm(); renderAll(); alert('Ordine salvato')}
-function clearForm(){['raw','cliente','telefono','ora','prodotti','note'].forEach(id=>document.getElementById(id).value=''); document.getElementById('data').value=gbIso(new Date()); document.getElementById('parseInfo').innerHTML=''}
-function setTodayFilter(f){filter=f;renderOrders()}
-function renderOrders(){let q=gbNorm(document.getElementById('search')?.value||''); let today=gbIso(new Date()); let tm=new Date();tm.setDate(tm.getDate()+1);let tomorrow=gbIso(tm); let arr=orders.filter(o=>filter==='all'||(filter==='today'&&o.data===today)||(filter==='tomorrow'&&o.data===tomorrow)).filter(o=>gbNorm(JSON.stringify(o)).includes(q)); document.getElementById('ordersList').innerHTML=arr.map(o=>`<div class="card order ${o.stato.replace(' ','')}"><div class="title">👤 ${o.cliente||'Senza nome'}</div><div class="small">📅 ${o.data} ${o.ora||''} · 📍 ${o.luogo} · 💰 ${o.pagato}</div><div class="items">${o.prodotti.split('\n').filter(Boolean).map(x=>`<div class="itemline">${x}</div>`).join('')}</div><div class="small">${o.note||''}</div><span class="pill">${o.stato}</span><br><button class="btn btn2" onclick="editOrder(${o.id})">✏️</button><button class="btn btnG" onclick="statusOrder(${o.id},'preparato')">Preparato</button><button class="btn btnG" onclick="statusOrder(${o.id},'consegnato')">Consegnato</button><button class="btn btnR" onclick="delOrder(${o.id})">Elimina</button></div>`).join('')||'<div class="card small">Nessun ordine</div>'}
+const orderKey='gb_orders_v4'; const reservationKey='gb_reservations_v4';
+let orders=JSON.parse(localStorage.getItem(orderKey)||'[]'); let reservations=JSON.parse(localStorage.getItem(reservationKey)||'[]');
+let orderFilter='all'; let reservationFilter='all';
+function $(id){return document.getElementById(id)}
+function val(id){return ($(id)?.value||'').trim()}
+function today(){return iso(new Date())}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function tomorrow(){let d=new Date(); d.setDate(d.getDate()+1); return iso(d)}
+function persist(){localStorage.setItem(orderKey,JSON.stringify(orders));localStorage.setItem(reservationKey,JSON.stringify(reservations))}
+function linesFromItems(items){return items.map(i=>i.line).join('\n')}
+function analyzeOrder(){const txt=val('rawOrder'); const r=GBParser.parseMessage(txt); if(r.cliente) $('oCliente').value=r.cliente; $('oData').value=r.data; if(r.ora) $('oOra').value=r.ora; if(r.prodotti.length) $('oProdotti').value=linesFromItems(r.prodotti); $('orderDebug').innerHTML=`<b>Analisi</b><br>Cliente: ${r.cliente||'<span class="warn">non trovato</span>'}<br>Data: ${r.data}<br>Ora: ${r.ora||'<span class="warn">non trovata</span>'}<br>Prodotti: ${r.prodotti.length?'<br>'+r.prodotti.map(x=>'✅ '+x.line).join('<br>'):'<span class="danger"> nessuno</span>'}`;}
+function analyzeReservation(){const txt=val('rawReservation'); const r=GBParser.parseReservation(txt); if(r.cliente) $('rCliente').value=r.cliente; $('rData').value=r.data; if(r.ora) $('rOra').value=r.ora; if(r.persone) $('rPersone').value=r.persone; $('reservationDebug').innerHTML=`<b>Analisi prenotazione</b><br>Cliente: ${r.cliente||'<span class="warn">non trovato</span>'}<br>Data: ${r.data}<br>Ora: ${r.ora||'<span class="warn">non trovata</span>'}<br>Persone: ${r.persone||'<span class="warn">non trovate</span>'}`;}
+function addQuickOrder(name,unit){let q=prompt(`Quantità per ${name}?`,'1'); if(!q)return; $('oProdotti').value+=($('oProdotti').value?'\n':'')+`${q} ${unit} ${name}`}
+function saveOrder(){let o={id:Date.now(),cliente:val('oCliente'),telefono:val('oTelefono'),data:val('oData')||today(),ora:val('oOra'),luogo:val('oLuogo'),prodotti:val('oProdotti'),note:val('oNote'),pagato:val('oPagato'),stato:'da preparare'}; orders.unshift(o); persist(); clearOrderForm(); renderAll(); alert('Ordine salvato')}
+function clearOrderForm(){['rawOrder','oCliente','oTelefono','oOra','oProdotti','oNote'].forEach(id=>$(id).value=''); $('oData').value=today(); $('orderDebug').innerHTML=''}
+function saveReservation(){let r={id:Date.now(),cliente:val('rCliente'),telefono:val('rTelefono'),data:val('rData')||today(),ora:val('rOra'),persone:val('rPersone'),tavolo:val('rTavolo'),note:val('rNote'),stato:'prenotato'}; reservations.unshift(r); persist(); clearReservationForm(); renderAll(); alert('Prenotazione salvata')}
+function clearReservationForm(){['rawReservation','rCliente','rTelefono','rOra','rPersone','rNote'].forEach(id=>$(id).value=''); $('rData').value=today(); $('reservationDebug').innerHTML=''}
+function renderOrders(){let q=GBParser.norm(val('searchOrders')); let arr=orders.filter(o=>orderFilter==='all'||(orderFilter==='today'&&o.data===today())||(orderFilter==='tomorrow'&&o.data===tomorrow())).filter(o=>GBParser.norm(JSON.stringify(o)).includes(q)); $('ordersList').innerHTML=arr.map(o=>`<div class="card order ${o.stato.replace(' ','')}"><div class="title">👤 ${o.cliente||'Senza nome'}</div><div class="small">📅 ${o.data} ${o.ora||''} · 📍 ${o.luogo} · 💰 ${o.pagato}</div><div class="items">${(o.prodotti||'').split('\n').filter(Boolean).map(x=>`<div class="itemline">${x}</div>`).join('')}</div><div class="small">${o.note||''}</div><span class="pill">${o.stato}</span><br><button class="btn btn2" onclick="editOrder(${o.id})">✏️</button><button class="btn btnG" onclick="statusOrder(${o.id},'preparato')">Preparato</button><button class="btn btnG" onclick="statusOrder(${o.id},'consegnato')">Consegnato</button><button class="btn btnR" onclick="delOrder(${o.id})">Elimina</button></div>`).join('')||'<div class="card small">Nessun ordine</div>'}
 function statusOrder(id,s){let o=orders.find(x=>x.id===id); if(o){o.stato=s;persist();renderAll()}}
 function delOrder(id){if(confirm('Eliminare ordine?')){orders=orders.filter(x=>x.id!==id);persist();renderAll()}}
-function editOrder(id){let o=orders.find(x=>x.id===id); if(!o)return; show('home',document.querySelector('.tab')); ['cliente','telefono','data','ora','luogo','prodotti','note','pagato'].forEach(k=>document.getElementById(k).value=o[k]||''); orders=orders.filter(x=>x.id!==id); persist(); renderAll()}
-function renderProduction(){let d=document.getElementById('prodDate').value||gbIso(new Date()); let totals={}; orders.filter(o=>o.data===d).forEach(o=>o.prodotti.split('\n').forEach(line=>{let m=line.match(/(\d+(?:\.\d+)?)\s*(kg|g|pz)\s+(.+)/i); if(m){let key=m[3].trim()+' ('+m[2].toLowerCase()+')'; totals[key]=(totals[key]||0)+Number(m[1])}})); document.getElementById('prodList').innerHTML=Object.entries(totals).sort().map(([k,v])=>`<div class="tot"><b>${k}</b><span>${v}</span></div>`).join('')||'<p class="small">Nessuna produzione per questa data</p>'}
-function renderClients(){let map={}; orders.forEach(o=>{if(!o.cliente)return; map[o.cliente]=(map[o.cliente]||0)+1}); document.getElementById('clientList').innerHTML=Object.entries(map).sort().map(([c,n])=>`<div class="tot"><b>${c}</b><span>${n} ordini</span></div>`).join('')||'<p class="small">Nessun cliente</p>'}
-function renderAll(){renderOrders();renderProduction();renderClients()}
-function show(id,el){document.querySelectorAll('section').forEach(s=>s.classList.add('hide'));document.getElementById(id).classList.remove('hide');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderAll()}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=4').catch(()=>{})}
-document.getElementById('data').value=gbIso(new Date()); document.getElementById('prodDate').value=gbIso(new Date()); renderAll();
+function editOrder(id){let o=orders.find(x=>x.id===id); if(!o)return; show('macelleria',tabBySection('macelleria')); $('oCliente').value=o.cliente||'';$('oTelefono').value=o.telefono||'';$('oData').value=o.data||today();$('oOra').value=o.ora||'';$('oLuogo').value=o.luogo||'Wettingen';$('oProdotti').value=o.prodotti||'';$('oNote').value=o.note||'';$('oPagato').value=o.pagato||'Da pagare'; orders=orders.filter(x=>x.id!==id); persist(); renderAll();}
+function renderReservations(){let q=GBParser.norm(val('searchReservations')); let arr=reservations.filter(r=>reservationFilter==='all'||(reservationFilter==='today'&&r.data===today())).filter(r=>GBParser.norm(JSON.stringify(r)).includes(q)); $('reservationsList').innerHTML=arr.map(r=>`<div class="card reservation"><div class="title">🍽️ ${r.cliente||'Senza nome'} · ${r.persone||'?'} persone</div><div class="small">📅 ${r.data} ${r.ora||''} · 🪑 ${r.tavolo}</div><div class="small">${r.note||''}</div><button class="btn btn2" onclick="editReservation(${r.id})">✏️</button><button class="btn btnR" onclick="delReservation(${r.id})">Elimina</button></div>`).join('')||'<div class="card small">Nessuna prenotazione</div>'}
+function editReservation(id){let r=reservations.find(x=>x.id===id); if(!r)return; show('steak',tabBySection('steak')); $('rCliente').value=r.cliente||'';$('rTelefono').value=r.telefono||'';$('rData').value=r.data||today();$('rOra').value=r.ora||'';$('rPersone').value=r.persone||'';$('rTavolo').value=r.tavolo||'Automatico';$('rNote').value=r.note||''; reservations=reservations.filter(x=>x.id!==id); persist(); renderAll();}
+function delReservation(id){if(confirm('Eliminare prenotazione?')){reservations=reservations.filter(x=>x.id!==id);persist();renderAll()}}
+function renderProduction(){let d=val('prodDate')||today(); let totals={}; orders.filter(o=>o.data===d).forEach(o=>(o.prodotti||'').split('\n').forEach(line=>{let m=line.match(/(\d+(?:[\.,]\d+)?)\s*(kg|g|pz)\s+(.+)/i); if(m){let name=m[3].trim();let unit=m[2].toLowerCase();let qty=Number(m[1].replace(',','.')); let key=name+' ('+unit+')'; totals[key]=(totals[key]||0)+qty;}})); $('productionList').innerHTML=Object.entries(totals).map(([k,v])=>`<div class="tot"><b>${k}</b><span>${Math.round(v*100)/100}</span></div>`).join('')||'<p class="small">Nessuna produzione per questa data</p>'}
+function renderClients(){let map={}; orders.forEach(o=>{if(o.cliente) map[o.cliente]=(map[o.cliente]||0)+1}); reservations.forEach(r=>{if(r.cliente) map[r.cliente]=(map[r.cliente]||0)+1}); $('clientsList').innerHTML=Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div class="tot"><b>${c}</b><span>${n} movimenti</span></div>`).join('')||'<p class="small">Nessun cliente</p>'}
+function renderDashboard(){let od=orders.filter(o=>o.data===today()).length; let rd=reservations.filter(r=>r.data===today()).length; let prep=orders.filter(o=>o.data===today()&&o.stato!=='consegnato').length; $('dashToday').innerHTML=`<div class="tot"><b>Ordini macelleria</b><span>${od}</span></div><div class="tot"><b>Da preparare</b><span>${prep}</span></div><div class="tot"><b>Prenotazioni Steak House</b><span>${rd}</span></div>`}
+function renderAll(){renderOrders();renderReservations();renderProduction();renderClients();renderDashboard()}
+function tabBySection(s){return document.querySelector(`.tab[data-section="${s}"]`)||document.querySelector('.tab')}
+function show(id,el){document.querySelectorAll('section').forEach(s=>s.classList.add('hide'));$(id).classList.remove('hide');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); if(el)el.classList.add('active'); renderAll()}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+$('oData').value=today(); $('prodDate').value=today(); $('rData').value=today(); renderAll();

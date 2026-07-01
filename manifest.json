@@ -1,1 +1,1 @@
-{"name":"Grindogballs Ordini","short_name":"GB Ordini","start_url":"./index.html?v=4","display":"standalone","background_color":"#0d0d0d","theme_color":"#111111","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
+{"name":"GB Manager","short_name":"GB Manager","start_url":"./index.html","display":"standalone","background_color":"#0d0d0d","theme_color":"#111111","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}

@@ -3,27 +3,108 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GB Ordini v4</title>
+<title>GB Manager v4</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#111111">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><h1>🥩 Grindogballs Ordini</h1><div class="ver">v4.0 parser nuovo IT/DE · kg/pezzi · debug</div></header>
+<header>
+  <h1>🥩 GB Manager</h1>
+  <div class="ver">v4.0 parser nuovo + Steak House prenotazioni</div>
+</header>
+
 <div class="wrap">
-<section id="home">
- <div class="card"><div class="title">📲 Importa da WhatsApp</div><label>Incolla messaggio cliente</label><textarea id="raw" placeholder="Esempio: Ciao sono Martina, 4 chili dolce 4 pezzi piccante per sabato 6 luglio alle 16"></textarea><button class="btn" onclick="analyze()">🤖 Analizza</button><button class="btn btn2" onclick="clearForm()">Pulisci</button><div id="parseInfo" class="debug"></div></div>
- <div class="card"><div class="title">➕ Nuovo ordine</div><label>Cliente</label><input id="cliente" placeholder="Nome cliente"><label>Telefono</label><input id="telefono" placeholder="Telefono">
- <div class="row"><div><label>Data ritiro</label><input id="data" type="date"></div><div><label>Ora</label><input id="ora" type="time"></div></div><label>Luogo</label><select id="luogo"><option>Wettingen</option><option>Würenlos</option><option>Catering</option></select>
- <label>Prodotti riconosciuti / ordine</label><textarea id="prodotti" placeholder="10 pz Dolce&#10;5 kg Finocchio"></textarea><div class="quick"><button onclick="addQuick('Dolce','pz')">+ Dolce</button><button onclick="addQuick('Piccante','pz')">+ Piccante</button><button onclick="addQuick('Finocchio','kg')">+ Finocchio kg</button><button onclick="addQuick('Gorgonzola','kg')">+ Gorgonzola kg</button></div>
- <label>Note</label><input id="note" placeholder="Note"><label>Pagamento</label><select id="pagato"><option>Da pagare</option><option>Pagato</option><option>Fattura</option></select><button class="btn" onclick="saveOrder()">💾 Salva ordine</button></div>
-</section>
-<section id="orders" class="hide"><div class="card"><div class="title">📦 Ordini</div><input id="search" placeholder="Cerca cliente/prodotto" oninput="renderOrders()"><button class="btn btn2" onclick="setTodayFilter('today')">Oggi</button><button class="btn btn2" onclick="setTodayFilter('tomorrow')">Domani</button><button class="btn btn2" onclick="setTodayFilter('all')">Tutti</button></div><div id="ordersList"></div></section>
-<section id="prod" class="hide"><div class="card"><div class="title">🥩 Produzione</div><label>Data</label><input id="prodDate" type="date" onchange="renderProduction()"><div id="prodList"></div></div></section>
-<section id="clients" class="hide"><div class="card"><div class="title">👥 Clienti</div><div id="clientList"></div></div></section>
+  <section id="dashboard">
+    <div class="grid2">
+      <button class="big" onclick="show('macelleria', tabBySection('macelleria'))">📦<span>Macelleria</span></button>
+      <button class="big" onclick="show('steak', tabBySection('steak'))">🍽️<span>Steak House</span></button>
+      <button class="big" onclick="show('ordini', tabBySection('ordini'))">📋<span>Ordini</span></button>
+      <button class="big" onclick="show('produzione', tabBySection('produzione'))">🥩<span>Produzione</span></button>
+    </div>
+    <div class="card"><div class="title">Oggi</div><div id="dashToday"></div></div>
+  </section>
+
+  <section id="macelleria" class="hide">
+    <div class="card">
+      <div class="title">📲 Importa ordine WhatsApp</div>
+      <textarea id="rawOrder" placeholder="Esempio: Ciao sono Martina, 4 chili dolce, 4 pezzi piccante per sabato 6 luglio alle 16"></textarea>
+      <button class="btn" onclick="analyzeOrder()">🤖 Analizza ordine</button>
+      <button class="btn btn2" onclick="clearOrderForm()">Pulisci</button>
+      <div id="orderDebug" class="debug"></div>
+    </div>
+
+    <div class="card">
+      <div class="title">➕ Nuovo ordine macelleria</div>
+      <label>Cliente</label><input id="oCliente" placeholder="Nome cliente">
+      <label>Telefono</label><input id="oTelefono" placeholder="Telefono">
+      <div class="row"><div><label>Data ritiro</label><input id="oData" type="date"></div><div><label>Ora</label><input id="oOra" type="time"></div></div>
+      <label>Luogo</label><select id="oLuogo"><option>Wettingen</option><option>Würenlos</option><option>Catering</option></select>
+      <label>Prodotti</label><textarea id="oProdotti" placeholder="4 kg Dolce&#10;4 pz Piccante"></textarea>
+      <div class="quick">
+        <button onclick="addQuickOrder('Dolce','kg')">+ Dolce kg</button>
+        <button onclick="addQuickOrder('Piccante','kg')">+ Piccante kg</button>
+        <button onclick="addQuickOrder('Finocchio','kg')">+ Finocchio kg</button>
+        <button onclick="addQuickOrder('Gorgonzola','kg')">+ Gorgonzola kg</button>
+      </div>
+      <label>Note</label><input id="oNote" placeholder="Note">
+      <label>Pagamento</label><select id="oPagato"><option>Da pagare</option><option>Pagato</option><option>Fattura</option></select>
+      <button class="btn" onclick="saveOrder()">💾 Salva ordine</button>
+    </div>
+  </section>
+
+  <section id="ordini" class="hide">
+    <div class="card">
+      <div class="title">📋 Ordini macelleria</div>
+      <input id="searchOrders" placeholder="Cerca cliente/prodotto" oninput="renderOrders()">
+      <button class="btn btn2" onclick="orderFilter='today';renderOrders()">Oggi</button>
+      <button class="btn btn2" onclick="orderFilter='tomorrow';renderOrders()">Domani</button>
+      <button class="btn btn2" onclick="orderFilter='all';renderOrders()">Tutti</button>
+    </div>
+    <div id="ordersList"></div>
+  </section>
+
+  <section id="produzione" class="hide">
+    <div class="card">
+      <div class="title">🥩 Produzione</div>
+      <label>Data</label><input id="prodDate" type="date" onchange="renderProduction()">
+      <div id="productionList"></div>
+    </div>
+  </section>
+
+  <section id="steak" class="hide">
+    <div class="card">
+      <div class="title">🍽️ Importa prenotazione WhatsApp</div>
+      <textarea id="rawReservation" placeholder="Esempio: Buonasera sono Marco, vorrei prenotare un tavolo per 4 persone sabato alle 20"></textarea>
+      <button class="btn" onclick="analyzeReservation()">🤖 Analizza prenotazione</button>
+      <button class="btn btn2" onclick="clearReservationForm()">Pulisci</button>
+      <div id="reservationDebug" class="debug"></div>
+    </div>
+    <div class="card">
+      <div class="title">➕ Nuova prenotazione</div>
+      <label>Cliente</label><input id="rCliente" placeholder="Nome cliente">
+      <label>Telefono</label><input id="rTelefono" placeholder="Telefono">
+      <div class="row"><div><label>Data</label><input id="rData" type="date"></div><div><label>Ora</label><input id="rOra" type="time"></div></div>
+      <div class="row"><div><label>Persone</label><input id="rPersone" type="number" min="1" placeholder="4"></div><div><label>Tavolo</label><select id="rTavolo"><option>Automatico</option><option>T1</option><option>T2</option><option>T3</option><option>T4</option><option>T5</option><option>Private Room</option></select></div></div>
+      <label>Note</label><input id="rNote" placeholder="Seggiolone, compleanno, allergie...">
+      <button class="btn" onclick="saveReservation()">💾 Salva prenotazione</button>
+    </div>
+    <div class="card"><div class="title">📅 Prenotazioni</div><input id="searchReservations" placeholder="Cerca prenotazione" oninput="renderReservations()"><button class="btn btn2" onclick="reservationFilter='today';renderReservations()">Oggi</button><button class="btn btn2" onclick="reservationFilter='all';renderReservations()">Tutte</button></div>
+    <div id="reservationsList"></div>
+  </section>
+
+  <section id="clienti" class="hide"><div class="card"><div class="title">👥 Clienti</div><div id="clientsList"></div></div></section>
 </div>
-<nav class="tabs"><div class="tab active" onclick="show('home',this)"><b>➕</b>Ordine</div><div class="tab" onclick="show('orders',this)"><b>📦</b>Ordini</div><div class="tab" onclick="show('prod',this)"><b>🥩</b>Produzione</div><div class="tab" onclick="show('clients',this)"><b>👥</b>Clienti</div></nav>
+
+<nav class="tabs">
+  <div class="tab active" data-section="dashboard" onclick="show('dashboard',this)"><b>🏠</b>Home</div>
+  <div class="tab" data-section="macelleria" onclick="show('macelleria',this)"><b>📦</b>Ordine</div>
+  <div class="tab" data-section="steak" onclick="show('steak',this)"><b>🍽️</b>Steak</div>
+  <div class="tab" data-section="ordini" onclick="show('ordini',this)"><b>📋</b>Lista</div>
+  <div class="tab" data-section="produzione" onclick="show('produzione',this)"><b>🥩</b>Prod.</div>
+</nav>
 <script src="catalogo.js"></script>
 <script src="parser.js"></script>
 <script src="app.js"></script>
-</body></html>
+</body>
+</html>
